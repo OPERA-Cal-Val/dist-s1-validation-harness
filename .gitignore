@@ -86,3 +86,6 @@ __pycache__/
 
 # Coverage
 *.coverage
+
+# Site data
+site_data/
