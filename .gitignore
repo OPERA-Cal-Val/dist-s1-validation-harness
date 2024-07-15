@@ -92,3 +92,6 @@ site_metrics/
 
 # Validation data sites
 !data/val_sites_subset.geojson
+
+# papermill output notebooks
+out_notebooks/
