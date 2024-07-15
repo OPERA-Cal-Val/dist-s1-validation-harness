@@ -41,6 +41,7 @@ dependencies:
   - kornia
   - backoff
   - transformers
+  - papermill
   - sktime
   - pip:
      - timm
