@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python=>3.11 # required for shapely 2.0.0
+  - pip 
   - flake8
   - backoff
   - flake8-import-order
