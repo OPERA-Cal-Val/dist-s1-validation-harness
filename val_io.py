@@ -43,6 +43,7 @@ def read_window_from_raster(
         values = src.read(1, window=window)
     return values
 
+
 @backoff.on_exception(
     backoff.expo, (RuntimeError, OSError), max_tries=10, max_time=60, jitter=backoff.full_jitter
 )
@@ -58,7 +59,7 @@ def get_burst_time_series_around_point(
         vals_l = pool.map(
             read_window_from_raster_p,
             urls,
-            # progress_bar=True, progress_bar_style='notebook',
+            progress_bar=True, progress_bar_style='notebook',
             concatenate_numpy_output=False,
         )
     return vals_l
