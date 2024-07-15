@@ -3,6 +3,7 @@ import numpy as np
 import rasterio
 from mpire import WorkerPool
 from pyproj import Transformer
+from rasterio import RasterioIOError
 from rasterio.crs import CRS
 from rasterio.transform import rowcol
 from rasterio.windows import Window
@@ -11,8 +12,8 @@ from requests.exceptions import HTTPError
 
 def get_utm_coords(url: str, lon: float, lat: float) -> tuple[float, float]:
     with rasterio.open(url) as src:
-        src_crs = src.crs
 
+        src_crs = src.crs
     transformer = Transformer.from_crs(CRS.from_epsg(4326), src_crs, always_xy=True)
     utm_x, utm_y = transformer.transform(lon, lat)
     return utm_x, utm_y
@@ -20,7 +21,7 @@ def get_utm_coords(url: str, lon: float, lat: float) -> tuple[float, float]:
 
 @backoff.on_exception(
     backoff.expo,
-    (HTTPError, ConnectionError),
+    (HTTPError, ConnectionError, RasterioIOError),
     max_tries=10,
     max_time=60,
     jitter=backoff.full_jitter,
@@ -41,7 +42,6 @@ def read_window_from_raster(
     with rasterio.open(url) as src:
         values = src.read(1, window=window)
     return values
-
 
 @backoff.on_exception(
     backoff.expo, (RuntimeError, OSError), max_tries=10, max_time=60, jitter=backoff.full_jitter
