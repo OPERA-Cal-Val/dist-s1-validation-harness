@@ -88,4 +88,7 @@ __pycache__/
 *.coverage
 
 # Site data
-site_data/
+site_metrics/
+
+# Validation data sites
+!data/val_sites_subset.geojson
