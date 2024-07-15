@@ -11,8 +11,8 @@ Utilizes OPERA RTC-S1 data to over DIST-HLS sites to:
 
 ```
 mamba env update -f environment.yml
-conda activate dist-s1
-python -m ipykernel install --user --name dist-s1
+conda activate dist-s1-harness
+python -m ipykernel install --user --name dist-s1-harness
 ```
 
 ## Usage
