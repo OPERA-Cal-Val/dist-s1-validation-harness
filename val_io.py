@@ -45,7 +45,7 @@ def read_window_from_raster(
 
 
 @backoff.on_exception(
-    backoff.expo, (RuntimeError, OSError), max_tries=10, max_time=60, jitter=backoff.full_jitter
+    backoff.expo, (RuntimeError, OSError), max_tries=20, max_time=60, jitter=backoff.full_jitter
 )
 def get_burst_time_series_around_point(
     urls: list[str], lon_site, lat_site, window_size=3
