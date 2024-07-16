@@ -48,14 +48,14 @@ def read_window_from_raster(
     backoff.expo, (RuntimeError, OSError), max_tries=20, max_time=60, jitter=backoff.full_jitter
 )
 def get_burst_time_series_around_point(
-    urls: list[str], lon_site, lat_site, window_size=3
+    urls: list[str], lon_site, lat_site, window_size=3, n_workers: int = 10
 ) -> list[np.ndarray]:
     utm_x, utm_y = get_utm_coords(urls[0], lon_site, lat_site)
 
     def read_window_from_raster_p(url: str):
         return read_window_from_raster(url, utm_x, utm_y, window_size=window_size)
 
-    with WorkerPool(n_jobs=10, use_dill=True) as pool:
+    with WorkerPool(n_jobs=n_workers, use_dill=True) as pool:
         vals_l = pool.map(
             read_window_from_raster_p,
             urls,
