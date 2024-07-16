@@ -10,9 +10,15 @@ from rasterio.windows import Window
 from requests.exceptions import HTTPError
 
 
+@backoff.on_exception(
+    backoff.expo,
+    (HTTPError, ConnectionError, RasterioIOError),
+    max_tries=10,
+    max_time=60,
+    jitter=backoff.full_jitter,
+)
 def get_utm_coords(url: str, lon: float, lat: float) -> tuple[float, float]:
     with rasterio.open(url) as src:
-
         src_crs = src.crs
     transformer = Transformer.from_crs(CRS.from_epsg(4326), src_crs, always_xy=True)
     utm_x, utm_y = transformer.transform(lon, lat)
