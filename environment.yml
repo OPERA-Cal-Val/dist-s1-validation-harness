@@ -1,9 +1,11 @@
-name: dist-s1-harness
+name: dist-s1
 channels:
   - conda-forge
+  - pytorch
 dependencies:
   - python=>3.11 # required for shapely 2.0.0
-  - pip 
+  - pip
+  # For packaging, and testing
   - flake8
   - backoff
   - flake8-import-order
@@ -15,18 +17,31 @@ dependencies:
   - ipykernel
   - rasterio
   - geopandas
+  - scikit-image
   - shapely=>2.0
   - pandas
   - tqdm
   - requests
   - rasterio
   - asf_search
+  - earthaccess
+  - tile_mate>=0.0.11
+  - dem_stitcher
+  - leafmap
   - dill
+  - flask<3.0
   - astropy
+  - localtileserver
+  - xarray
+  - pytorch::pytorch
+  - torchvision
+  - pytorch-lightning
+  - torchmetrics
+  - statsmodels
+  - kornia
   - backoff
+  - transformers
+  - sktime
   - papermill
-  - mpire
-  - multiprocess
-  - pyarrow
   - pip:
-    - git+https://github.com/OPERA-Cal-Val/distmetrics.git
+     - timm

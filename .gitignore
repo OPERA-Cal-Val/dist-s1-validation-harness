@@ -95,3 +95,9 @@ site_metrics/
 
 # papermill output notebooks
 out_notebooks/
+
+# papermill data
+out/
+
+# Deprecated
+deprecated/
