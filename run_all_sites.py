@@ -92,6 +92,7 @@ def main(param_idx_start: int, n_cpus: int, step_start: int):
                 )
             if "2_" in in_nb.stem:
                 for distmetric_name in DISTMETRIC_NAMES[:]:
+                    print(f'{distmetric_name=}')
                     pm.execute_notebook(
                         in_nb,
                         output_path=out_nb,
