@@ -31,6 +31,21 @@ def get_site_burst_count():
     return df_site_burst_count
 
 
+def enumerate_parameters():
+    df_count = get_site_burst_count()
+    site_ids, counts = df_count.site_id.tolist(), df_count.bursts.tolist()
+    parameters = [
+        (site_id, burst_idx)
+        for (site_id, count) in zip(site_ids, counts)
+        for burst_idx in range(count)
+    ]
+    parameters = [
+        (param_idx, site_id, count)
+        for param_idx, (site_id, count) in enumerate(parameters)
+    ]
+    return parameters
+
+
 @click.option(
     "--param_idx_start",
     required=False,
@@ -56,17 +71,9 @@ def main(param_idx_start: int, n_cpus: int, step_start: int):
     ipynb_dir = Path(p)
     ipynb_dir.mkdir(exist_ok=True, parents=True)
 
-    df_count = get_site_burst_count()
-    site_ids, counts = df_count.site_id.tolist(), df_count.bursts.tolist()
-    parameters = [
-        (site_id, burst_idx)
-        for (site_id, count) in zip(site_ids, counts)
-        for burst_idx in range(count)
-    ]
-    parameters = [
-        (param_idx, site_id, count)
-        for param_idx, (site_id, count) in enumerate(parameters)
-    ]
+    # (param_idx, site_id, burst_idx)
+    parameters = enumerate_parameters()
+
     # Localize RTC Data
     if param_idx_start:
         parameters = parameters[param_idx_start:]
@@ -78,11 +85,11 @@ def main(param_idx_start: int, n_cpus: int, step_start: int):
             parameters, desc="sites/bursts combos"
         ):
             print(f"{param_idx=}", f"{site_id=}", f"{burst_idx=}")
-            out_nb = (
-                step_ipynb_dir
-                / f"{param_idx}__site{site_id}_burstidx{burst_idx}_{in_nb.stem[2:]}.ipynb"
-            )
             if "1_" in in_nb.stem:
+                out_nb = (
+                    step_ipynb_dir
+                    / f"{param_idx}__site{site_id}_burstidx{burst_idx}_{in_nb.stem[2:]}.ipynb"
+                )
                 pm.execute_notebook(
                     in_nb,
                     output_path=out_nb,
@@ -92,7 +99,11 @@ def main(param_idx_start: int, n_cpus: int, step_start: int):
                 )
             if "2_" in in_nb.stem:
                 for distmetric_name in DISTMETRIC_NAMES[:]:
-                    print(f'{distmetric_name=}')
+                    out_nb = (
+                        step_ipynb_dir
+                        / f"{param_idx}__site{site_id}_burstidx{burst_idx}_{in_nb.stem[2:]}_{distmetric_name}.ipynb"
+                    )
+                    print(f"{distmetric_name=}")
                     pm.execute_notebook(
                         in_nb,
                         output_path=out_nb,
