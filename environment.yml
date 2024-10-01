@@ -39,6 +39,7 @@ dependencies:
   - torchmetrics
   - statsmodels
   - kornia
+  - openpyxl
   - backoff
   - transformers
   - sktime
